@@ -22,3 +22,15 @@ pontos = {}
 botaosalvar = pygame.Rect(10, 10, 150, 30)
 botaocarregar = pygame.Rect(170, 10, 150, 30)
 botaoexcluir = pygame.Rect(330, 10, 150, 30)
+
+def novaestrela(posicao, nome):
+    global ultimoponto
+    pontos[posicao] = nome
+    ultimoponto = posicao
+
+def desenhapontos():
+    for (x, y), nome in pontos.items():
+        pygame.draw.circle(tela, cor, (x, y), 5)
+        font = pygame.font.Font(None, 20)
+        text = font.render(nome, True, cor)
+        tela.blit(text, (x + 10, y - 10))
