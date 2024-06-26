@@ -23,6 +23,42 @@ botaosalvar = pygame.Rect(10, 10, 150, 30)
 botaocarregar = pygame.Rect(170, 10, 150, 30)
 botaoexcluir = pygame.Rect(330, 10, 150, 30)
 
+def main():
+    global ultimoponto
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                savepontos()
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    savepontos()
+                    pygame.quit()
+                    sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    x, y = event.pos
+                    if botaosalvar.collidepoint(x, y):
+                        savepontos()
+                    elif botaocarregar.collidepoint(x, y):
+                        carregapontos()
+                    elif botaoexcluir.collidepoint(x, y):
+                        excluimarcacoes()
+                    else:
+                        nomeestrela1 = pede_nomeestrela()
+                        novaestrela((x, y), nomeestrela1)
+
+        tela.blit(fundo, (0, 0))
+        desenhapontos()
+        desenhalinhas()
+        desenhabotoes()
+        pygame.display.flip()
+        clock.tick(30)
+
+    pygame.quit()
+
 def novaestrela(posicao, nome):
     global ultimoponto
     pontos[posicao] = nome
@@ -42,6 +78,18 @@ def pede_nomeestrela():
     root.destroy()
     return nome if nome else 'Desconhecido'
 
+def desenhalinhas():
+    posicoes = list(pontos.keys())
+    for i in range(len(posicoes) - 1):
+        pygame.draw.line(tela, cor, posicoes[i], posicoes[i + 1], 2)
+        distancia = calculardistancia(posicoes[i], posicoes[i + 1])
+        font = pygame.font.Font(None, 20)
+        text = font.render(f"{distancia:.2f} anos luz", True, cor)
+        tela.blit(text, ((posicoes[i][0] + posicoes[i + 1][0]) // 2, (posicoes[i][1] + posicoes[i + 1][1]) // 2))
+
+def calculardistancia(p1, p2):
+    return math.sqrt(math.pow(p2[0] - p1[0], 2) + math.pow(p2[1] - p1[1], 2))
+
 def desenhabotoes():
     pygame.draw.rect(tela, (255, 255, 255), botaosalvar)
     pygame.draw.rect(tela, (255, 255, 255), botaocarregar)
@@ -59,6 +107,7 @@ def savepontos():
         pontos_str = {f"{x},{y}": nome for (x, y), nome in pontos.items()}
         json.dump(pontos_str, file)
     print("Marcações salvas.")
+
 
 def carregapontos():
     global pontos, ultimoponto
@@ -78,3 +127,5 @@ def excluimarcacoes():
     ultimoponto = None
     print("Todas as marcações foram excluídas.")
 
+if __name__ == '__main__':
+    main()
