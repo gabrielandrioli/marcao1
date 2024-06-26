@@ -41,3 +41,21 @@ def pede_nomeestrela():
     nome = simpledialog.askstring('Nome da Estrela', 'Digite o nome da estrela:')
     root.destroy()
     return nome if nome else 'Desconhecido'
+
+def desenhabotoes():
+    pygame.draw.rect(tela, (255, 255, 255), botaosalvar)
+    pygame.draw.rect(tela, (255, 255, 255), botaocarregar)
+    pygame.draw.rect(tela, (255, 255, 255), botaoexcluir)
+    font = pygame.font.Font(None, 25)
+    texto_salvar = font.render("Salvar Marcações", True, (0, 0, 0))
+    texto_carregar = font.render("Carregar Marcações", True, (0, 0, 0))
+    texto_excluir = font.render("Excluir Marcações", True, (0, 0, 0))
+    tela.blit(texto_salvar, (botaosalvar.x + 5, botaosalvar.y + 5))
+    tela.blit(texto_carregar, (botaocarregar.x + 5, botaocarregar.y + 5))
+    tela.blit(texto_excluir, (botaoexcluir.x + 5, botaoexcluir.y + 5))
+    
+def savepontos():
+    with open('savefile.txt', 'w') as file:
+        pontos_str = {f"{x},{y}": nome for (x, y), nome in pontos.items()}
+        json.dump(pontos_str, file)
+    print("Marcações salvas.")
