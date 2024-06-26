@@ -34,3 +34,10 @@ def desenhapontos():
         font = pygame.font.Font(None, 20)
         text = font.render(nome, True, cor)
         tela.blit(text, (x + 10, y - 10))
+
+def pede_nomeestrela():
+    root = tk.Tk()
+    root.withdraw()
+    nome = simpledialog.askstring('Nome da Estrela', 'Digite o nome da estrela:')
+    root.destroy()
+    return nome if nome else 'Desconhecido'
