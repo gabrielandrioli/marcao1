@@ -59,3 +59,22 @@ def savepontos():
         pontos_str = {f"{x},{y}": nome for (x, y), nome in pontos.items()}
         json.dump(pontos_str, file)
     print("Marcações salvas.")
+
+def carregapontos():
+    global pontos, ultimoponto
+    if os.path.exists('savefile.txt'):
+        with open('savefile.txt', 'r') as file:
+            pontos_str = json.load(file)
+        pontos = {tuple(map(int, k.split(','))): v for k, v in pontos_str.items()}
+        if pontos:
+            ultimoponto = list(pontos.keys())[-1]
+        print("Marcações carregadas.")
+    else:
+        print("Nenhum arquivo de salvamento encontrado.")
+
+def excluimarcacoes():
+    global pontos, ultimoponto
+    pontos = {}
+    ultimoponto = None
+    print("Todas as marcações foram excluídas.")
+
